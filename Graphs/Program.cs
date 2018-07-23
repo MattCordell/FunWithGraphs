@@ -14,33 +14,31 @@ namespace Graphs
         {
             var w = new Stopwatch();
             w.Start();
-            var NormalisedGraph = ReadActiveStatedRelationships(@"C:\sct2_Relationship_Snapshot_AU1000036_20180731.txt");
+            //var NormalisedGraph = ReadActiveStatedRelationships(@"C:\sct2_Relationship_Snapshot_AU1000036_20180731.txt");
+            var NormalisedGraph = new Graph();
             w.Stop();
             Console.WriteLine(w.ElapsedMilliseconds.ToString());
 
-            //NormalisedGraph.Add(new DirectedEdge('B', 'A'));
-            //NormalisedGraph.Add(new DirectedEdge('C', 'A'));
-            //NormalisedGraph.Add(new DirectedEdge('D', 'C'));
-            //NormalisedGraph.Add(new DirectedEdge('E', 'C'));
-            //var rootNode = 'A';
+            NormalisedGraph.Add(new DirectedEdge('B', 'A'));
+            NormalisedGraph.Add(new DirectedEdge('C', 'A'));
+            NormalisedGraph.Add(new DirectedEdge('D', 'C'));
+            NormalisedGraph.Add(new DirectedEdge('E', 'C'));
+            var rootNode = 'A';
 
             Console.WriteLine(NormalisedGraph.First().ToString());
                 
 
-            long rootNode = 138875005;
+            //long rootNode = 138875005;
             w.Restart();
             var TransitiveClosure = NormalisedGraph.CalculateTransitiveClosure(rootNode);
             w.Stop();
             Console.WriteLine(w.ElapsedMilliseconds.ToString());
 
             Console.WriteLine("There are {0} edges in the original graph", NormalisedGraph.Count.ToString());
-            Console.WriteLine("There are {0} edges in the transitive closure", TransitiveClosure.Count.ToString());
+            NormalisedGraph.OutputGraph();
 
-            //output graph
-            //foreach (var item in TransitiveClosure)
-            //{
-            //    Console.WriteLine(item.ToString());
-            //}
+            Console.WriteLine("There are {0} edges in the transitive closure", TransitiveClosure.Count.ToString());
+            TransitiveClosure.OutputGraph();
 
             Console.WriteLine("Done.");
             Console.ReadKey();            
@@ -107,7 +105,14 @@ namespace Graphs
 
     class Graph : HashSet<DirectedEdge>
     {
-
+        public void OutputGraph()
+        {
+            //output graph
+            foreach (var item in this)
+            {
+                Console.WriteLine(item.ToString());
+            }
+        }
 
         //DFS method
         public Graph CalculateTransitiveClosure(object root)
