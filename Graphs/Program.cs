@@ -118,25 +118,35 @@ namespace Graphs
         public Graph CalculateTransitiveClosure(object root)
         {
             var TransitiveClosure = new Graph();
-            var UnexploredNodes = new Stack<object>();
-            var exploredNodes = new List<object>();
+            var nodesToExplore = new Stack<object>();
+            var exploredNodes = new HashSet<object>();
            
+            nodesToExplore.Push(root);
 
-            UnexploredNodes.Push(root);
-
-            while (UnexploredNodes.Count > 0)
+            while (nodesToExplore.Count > 0)
             {
-                var parent = UnexploredNodes.Pop();
-                foreach (var edge in this.Where(e => e.destination.Equals(parent)).ToArray())
-                {
-                    UnexploredNodes.Push(edge.source); //child node
-                    TransitiveClosure.Add(edge);       //add the statedEdge
-                    foreach (var transitiveEdge in TransitiveClosure.Where(e => e.source.Equals(parent)).ToArray())
-                    {
-                        TransitiveClosure.Add(new DirectedEdge(edge.source, transitiveEdge.destination)); // AncestorEdges
-                    }
-                }
+                var parent = nodesToExplore.Pop();
                 exploredNodes.Add(parent);
+                foreach (var childEdge in this.Where(e => e.destination.Equals(parent)).ToArray())
+                {
+                    TransitiveClosure.Add(childEdge);       //add the statedEdge
+                    var childNode = childEdge.source;
+
+                    //add all the parents TC edges to the childNode                
+                    foreach (var ancestorEdge in TransitiveClosure.Where(e => e.source.Equals(parent)).ToArray())
+                    {
+                        TransitiveClosure.Add(new DirectedEdge(childNode, ancestorEdge.destination)); // AncestorEdges                            
+                    }
+
+                    if (!exploredNodes.Contains(childNode))
+                    {
+                        nodesToExplore.Push(childNode);
+                    }
+                    
+
+                                                                               
+                }
+                
             }
 
             return TransitiveClosure;
@@ -144,3 +154,15 @@ namespace Graphs
 
     }
 }
+                   ////if the node has been explored, add all its edges to its descedents
+                   //     if (exploredNodes.Contains(childNode))
+                   //     {
+                   //         foreach (var descendentEdge in TransitiveClosure.Where(e => e.destination.Equals(childNode)).ToArray())
+                   //         {
+                   //             TransitiveClosure.Add(new DirectedEdge(descendentEdge.source, ancestorEdge.destination)); // AncestorEdges
+                   //         }
+                   //     }
+                   //     else
+                   //     {
+                   //         nodesToExplore.Push(childNode);
+                   //     }
