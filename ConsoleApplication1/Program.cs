@@ -16,37 +16,74 @@ namespace Graphs
             var w = new Stopwatch();
             w.Start();
             //var NormalisedGraph = ReadActiveStatedRelationships(@"C:\sct2_Relationship_Snapshot_AU1000036_20180731.txt");
-            var NormalisedGraph = ReadActiveStatedRelationships(@"C:\sct2_StatedRelationship_Snapshot_INT_20180131.txt");
-            long rootNode = 30515011000036103;
+            //var NormalisedGraph = ReadActiveStatedRelationships(@"C:\sct2_StatedRelationship_Snapshot_INT_20180131.txt");
+            //long rootNode = 30515011000036103;
 
-            //var NormalisedGraph = new Graph();
-            //NormalisedGraph.Add('B', 'A');
-            //NormalisedGraph.Add('C', 'A');
-            //NormalisedGraph.Add('D', 'C');
-            //NormalisedGraph.Add('E', 'C');
-            //NormalisedGraph.Add('D', 'B');
-            //var rootNode = 'A';
+            //"Progeny" Adjacency list with Key = parent nodes, and value = children
+            var Progeny = new AdjacenyList();
+            Progeny.AddEdge('A', 'B');
+            Progeny.AddEdge('A', 'C');
+            Progeny.AddEdge('C', 'D');
+            Progeny.AddEdge('C', 'E');
+            Progeny.AddEdge('B', 'D');
+            var rootNode = 'A';
 
-            w.Stop();
-            Console.WriteLine(w.ElapsedMilliseconds.ToString());           
+            Console.WriteLine("There are {0} edges in the original graph", Progeny.CountEdges());
+
+            Progeny.OutPutGraph();
+
 
 
             
-            w.Restart();
-            var TransitiveClosure = NormalisedGraph.CalculateTransitiveClosure(rootNode);
-            w.Stop();
-            Console.WriteLine(w.ElapsedMilliseconds.ToString());
 
-            Console.WriteLine("There are {0} edges in the original graph", NormalisedGraph.table.Rows.Count.ToString());
-           
-
-            Console.WriteLine("There are {0} edges in the transitive closure", TransitiveClosure.table.Rows.Count.ToString());
-        
+            
 
             Console.WriteLine("Done.");
             Console.ReadKey();
         }
 
+        public class AdjacenyList
+        {
+            public Dictionary<object, HashSet<object>> AL;
+
+            public AdjacenyList()
+            {                          
+                AL = new Dictionary<object, HashSet<object>>();
+            }
+
+            public void AddEdge(object source, object destination)
+            {
+                //create a new index if not already there
+                if (!AL.ContainsKey(source))
+                {
+                    AL.Add(source, new HashSet<object>());                    
+                }
+                AL[source].Add(destination);
+            }
+
+            public int CountEdges()
+            {
+                int i = 0;
+                foreach (var item in AL)
+                {
+                    i += item.Value.Count();
+                }
+                return i;
+            }
+
+            public void OutPutGraph()
+            {
+                foreach (var item in AL)
+                {
+                    foreach (var edge in item.Value)
+                    {
+                        Console.WriteLine("{0} - {1}", item.Key.ToString(), edge.ToString());
+                    }
+
+                }
+            }
+
+        }
 
         [DelimitedRecord("\t")]
         [IgnoreFirst]
@@ -66,129 +103,80 @@ namespace Graphs
         }
 
 
-        internal static Graph ReadActiveStatedRelationships(string path)
-        {
+        //internal static Graph ReadActiveStatedRelationships(string path)
+        //{
 
-            var relationships = new FileHelperAsyncEngine<Relationship>();
-            var G = new Graph();
+        //    var relationships = new FileHelperAsyncEngine<Relationship>();
+        //    var G = new Graph();
 
-            using (relationships.BeginReadFile(path))
-            {
-                foreach (Relationship r in relationships)
-                {
-                    if (r.active && r.typeId == 116680003) //active IS A relationships
-                    {
-                        G.Add(r.sourceId, r.destinationId);
-                    }
-                }
-            }
-            Console.WriteLine("Stated Relationships Read");
-            return G;
-        }
+        //    using (relationships.BeginReadFile(path))
+        //    {
+        //        foreach (Relationship r in relationships)
+        //        {
+        //            if (r.active && r.typeId == 116680003) //active IS A relationships
+        //            {
+        //                G.Add(r.sourceId, r.destinationId);
+        //            }
+        //        }
+        //    }
+        //    Console.WriteLine("Stated Relationships Read");
+        //    return G;
+        //}
 
     }
-
-    public class DirectedEdge
-    {
-        public object source;
-        public object destination;
-
-        public DirectedEdge(object source, object destination)
-        {
-            this.source = source;
-            this.destination = destination;
-        }
-
-        public override string ToString()
-        {
-            return source.ToString() + ' ' + destination.ToString();
-        }
-    }
-
-    public class Graph
-    {
-        internal DataTable table;
-
-        public Graph()
-        {   
-            // Create a new DataTable.
-            table = new DataTable("Graph");
-            // Declare variables for DataColumn and DataRow objects.
-            
-            DataColumn source = new DataColumn("source", Type.GetType("System.Object"));
-            DataColumn dest = new DataColumn("destination", Type.GetType("System.Object"));
-            table.Columns.Add(source);
-            table.Columns.Add(dest);            
-        }
-
-        public void Add(object s, object d)
-        {
-            var row = this.table.NewRow();
-            row["source"] = s;
-            row["destination"] = d;
-            table.Rows.Add(row);
-        }
-
-        public void OutputGraph()
-        {
-            //output graph
-            foreach (var item in this.table.AsEnumerable())
-            {
-                Console.WriteLine(item["source"].ToString() + " " + item["destination"].ToString());
-            }
-        }
 
         //DFS method
-        public Graph CalculateTransitiveClosure(object root)
-        {
-            var TransitiveClosure = new Graph();
-            var nodesToExplore = new Stack<object>();
-            var exploredNodes = new HashSet<object>();
+        //public Graph CalculateTransitiveClosure(object root)
+        //{
+        //    var TransitiveClosure = new Graph();
+        //    var nodesToExplore = new Stack<object>();
+        //    var exploredNodes = new HashSet<object>();
 
-            nodesToExplore.Push(root);
+        //    nodesToExplore.Push(root);
 
-            while (nodesToExplore.Count > 0)
-            {
-                var parent = nodesToExplore.Pop();
-                exploredNodes.Add(parent);
+        //    while (nodesToExplore.Count > 0)
+        //    {
+        //        var parent = nodesToExplore.Pop();
+        //        exploredNodes.Add(parent);
 
-                foreach (var childEdge in this.table.Select().Where(e => e["destination"].Equals(parent)))
-                {
-                    TransitiveClosure.Add(childEdge["source"], childEdge["destination"]);       //add the statedEdge
-                    var childNode = childEdge["source"];
+        //        foreach (var childEdge in this.table.Select().Where(e => e["destination"].Equals(parent)))
+        //        {
+        //            TransitiveClosure.Add(childEdge["source"], childEdge["destination"]);       //add the statedEdge
+        //            var childNode = childEdge["source"];
 
-                    //add all the parents TC edges to the childNode                
-                    foreach (var ancestorEdge in TransitiveClosure.table.Select().Where(e => e["source"].Equals(parent)))
-                    {
-                        TransitiveClosure.Add(childNode, ancestorEdge["destination"]); // AncestorEdges 
-
-
-                        if (exploredNodes.Contains(childNode))
-                        {
-                            // for all the childnodes descendents, add new ancestor parents too
-                            foreach (var descendentEdge in TransitiveClosure.table.Select().Where(e => e["destination"].Equals(childNode)))
-                            {
-                                TransitiveClosure.Add(descendentEdge["source"], ancestorEdge["destination"]); // AncestorEdges
-                            }
-                        }
-                    }
-
-                    if (!exploredNodes.Contains(childNode))
-                    {
-                        nodesToExplore.Push(childNode);
-                    }
+        //            //add all the parents TC edges to the childNode                
+        //            foreach (var ancestorEdge in TransitiveClosure.table.Select().Where(e => e["source"].Equals(parent)))
+        //            {
+        //                TransitiveClosure.Add(childNode, ancestorEdge["destination"]); // AncestorEdges 
 
 
+        //                if (exploredNodes.Contains(childNode))
+        //                {
+        //                    // for all the childnodes descendents, add new ancestor parents too
+        //                    foreach (var descendentEdge in TransitiveClosure.table.Select().Where(e => e["destination"].Equals(childNode)))
+        //                    {
+        //                        TransitiveClosure.Add(descendentEdge["source"], ancestorEdge["destination"]); // AncestorEdges
+        //                    }
+        //                }
+        //            }
 
-                }
+        //            if (!exploredNodes.Contains(childNode))
+        //            {
+        //                nodesToExplore.Push(childNode);
+        //            }
 
-            }
 
-            return TransitiveClosure;
-        }
 
-    }
+        //        }
+
+        //    }
+
+        //    return TransitiveClosure;
+        //}
+
+    //}
 }
+
 ////if the node has been explored, add all its edges to its descedents
 //     if (exploredNodes.Contains(childNode))
 //     {

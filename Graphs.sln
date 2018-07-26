@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Graphs", "Graphs\Graphs.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphsTests", "GraphsTests\GraphsTests.csproj", "{79240627-B1CC-4E64-822B-B376DDFFBC89}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApplication1", "ConsoleApplication1\ConsoleApplication1.csproj", "{262EBE9D-A9BB-426B-8D5E-9691A9EC3776}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdjancencyList-DFS", "ConsoleApplication1\AdjancencyList-DFS.csproj", "{262EBE9D-A9BB-426B-8D5E-9691A9EC3776}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
