@@ -32,16 +32,59 @@ namespace Graphs
 
             Progeny.OutPutGraph();
 
+            var tc = new AdjacenyList();
+            var nodesToExplore = new Stack<object>();
+            var Explored = new HashSet<object>();
+            var path = new Stack<object>();
+            var found = false;
+            nodesToExplore.Push(rootNode);
+
+            while (nodesToExplore.Count > 0)
+            {
+                var n = nodesToExplore.Pop();
+                
+
+                if (Explored.Contains(n))
+                {
+                    //Add its subtypes to every node in path                  
+                }
+                // if not explored, queue up the children for exploration, and add parent to path
+                else if (Progeny.HasChildren(n))
+                {
+                    path.Push(n);
+                    //add all children to nodesToExplore
+                    //add n to path
+                }
+
+                //manage the path....
+                if (!Progeny.HasChildren(n))
+                {
+                    //path.pop()
+                }
+
+                
+                //finally add n as a subtype to all in path
 
 
-            
 
-            
+                Explored.Add(n);
+            }
+
+            Console.WriteLine("Found D : {0}", found.ToString());
+
+
+
+
 
             Console.WriteLine("Done.");
             Console.ReadKey();
         }
 
+        //AdjacenyList Key = sourceNode, value=hashSet of destinationNodes.
+        //Class is for a directed Graph Key:
+        //      Key = ParentNode for source-HasChild-destination ("progeny")
+        //      Key = ChildNode  for source-hasParent-destination ("lineage")
+        //Undirected graph, can be created by overiding AddEdge(s,d)
         public class AdjacenyList
         {
             public Dictionary<object, HashSet<object>> AL;
@@ -51,7 +94,7 @@ namespace Graphs
                 AL = new Dictionary<object, HashSet<object>>();
             }
 
-            public void AddEdge(object source, object destination)
+            public virtual void AddEdge(object source, object destination)
             {
                 //create a new index if not already there
                 if (!AL.ContainsKey(source))
@@ -83,6 +126,35 @@ namespace Graphs
                 }
             }
 
+            internal IEnumerable<object> ReturnChildren(object parentNode)
+            {
+                    return AL[parentNode];                         
+            }
+
+            public bool HasChildren(object node)
+            {
+                return AL.ContainsKey(node);
+            }
+        }
+
+        //For undirectedGraph
+        public class UndirectedAdjacencyList : AdjacenyList
+        {
+            public override void AddEdge(object node1, object node2)
+            {
+                //create a new index if not already there
+                if (!AL.ContainsKey(node1))
+                {
+                    AL.Add(node1, new HashSet<object>());
+                }
+                if (!AL.ContainsKey(node2))
+                {
+                    AL.Add(node2, new HashSet<object>());
+                }
+
+                AL[node1].Add(node2);
+                AL[node2].Add(node1);
+            }
         }
 
         [DelimitedRecord("\t")]
