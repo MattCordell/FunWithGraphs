@@ -46,28 +46,33 @@ namespace Graphs
 
                 if (Explored.Contains(n))
                 {
-                    //Add its subtypes to every node in path                  
+                    //Add it to everything in the path
+
+                    if (Progeny.HasChildren(n))
+                    {                        
+                        //Add its subtypes to every node in path
+                    }
                 }
+
                 // if not explored, queue up the children for exploration, and add parent to path
-                else if (Progeny.HasChildren(n))
+                else 
                 {
-                    path.Push(n);
-                    //add all children to nodesToExplore
-                    //add n to path
-                }
-
-                //manage the path....
-                if (!Progeny.HasChildren(n))
-                {
-                    //path.pop()
-                }
-
+                    if (Progeny.HasChildren(n))
+                    {
+                        path.Push(n);
+                        //add all children to nodesToExplore
+                        //add n to path
+                    }
+                    //if a terminal node is encountered, wind back the path.
+                    //(keep popping until peek is in toExplore
+                    else if (!Progeny.HasChildren(n))
+                    {
+                        
+                    }
+                    Explored.Add(n);
+                }                               
                 
-                //finally add n as a subtype to all in path
-
-
-
-                Explored.Add(n);
+                
             }
 
             Console.WriteLine("Found D : {0}", found.ToString());
