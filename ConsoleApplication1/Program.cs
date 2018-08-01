@@ -21,6 +21,16 @@ namespace Graphs
 
             //"Progeny" Adjacency list with Key = parent nodes, and value = children
             var Progeny = new AdjacenyList();
+
+            /*
+               A
+              / \
+              B  C
+              \ / \
+               D   E
+            
+            */
+
             Progeny.AddEdge('A', 'B');
             Progeny.AddEdge('A', 'C');
             Progeny.AddEdge('C', 'D');
@@ -36,51 +46,70 @@ namespace Graphs
             var nodesToExplore = new Stack<object>();
             var Explored = new HashSet<object>();
             var path = new Stack<object>();
-            var found = false;
+            
             nodesToExplore.Push(rootNode);
+            int i = 0; 
 
             while (nodesToExplore.Count > 0)
             {
                 var n = nodesToExplore.Pop();
-                
+                foreach (var node in path)
+                {
+                    tc.AddEdge(node, n);
+                }
 
                 if (Explored.Contains(n))
                 {
                     //Add it to everything in the path
+                    foreach (var item in path)
+                    {
+                        tc.AddEdge(item, n);
+                    }
 
                     if (Progeny.HasChildren(n))
-                    {                        
+                    {
                         //Add its subtypes to every node in path
+                        foreach (var node in path)
+                        {
+                            tc.AL[node].Union(tc.AL[n]);
+                        }
                     }
                 }
 
-                // if not explored, queue up the children for exploration, and add parent to path
+                // if not explored, 
                 else 
                 {
+                    // queue up the children for exploration, and add parent to path
                     if (Progeny.HasChildren(n))
                     {
                         path.Push(n);
-                        //add all children to nodesToExplore
-                        //add n to path
+                        foreach (var child in Progeny.AL[n])
+                        {
+                            nodesToExplore.Push(child);
+
+                        }
                     }
-                    //if a terminal node is encountered, wind back the path.
+
+                    //if a terminal/leaf node is encountered, wind back the path.
                     //(keep popping until peek is in toExplore
                     else if (!Progeny.HasChildren(n))
                     {
+                        //progeny.AL[n]
                         
+                        //while (nodesToExplore.Contains(path.Peek()) && !path.Peek().Equals(rootNode))
+                       while (!Progeny.AL[path.Peek()].Contains(nodesToExplore.Peek()) && !path.Peek().Equals(rootNode))
+                        {
+                            path.Pop();
+                        }
+
                     }
                     Explored.Add(n);
-                }                               
-                
-                
+                }                                           
             }
 
-            Console.WriteLine("Found D : {0}", found.ToString());
-
-
-
-
-
+            Console.WriteLine("Here's the TC:");
+            tc.OutPutGraph();
+            Console.WriteLine("It's got {0} edges",tc.CountEdges().ToString());
             Console.WriteLine("Done.");
             Console.ReadKey();
         }
@@ -179,90 +208,5 @@ namespace Graphs
             public long modifierId;
         }
 
-
-        //internal static Graph ReadActiveStatedRelationships(string path)
-        //{
-
-        //    var relationships = new FileHelperAsyncEngine<Relationship>();
-        //    var G = new Graph();
-
-        //    using (relationships.BeginReadFile(path))
-        //    {
-        //        foreach (Relationship r in relationships)
-        //        {
-        //            if (r.active && r.typeId == 116680003) //active IS A relationships
-        //            {
-        //                G.Add(r.sourceId, r.destinationId);
-        //            }
-        //        }
-        //    }
-        //    Console.WriteLine("Stated Relationships Read");
-        //    return G;
-        //}
-
-    }
-
-        //DFS method
-        //public Graph CalculateTransitiveClosure(object root)
-        //{
-        //    var TransitiveClosure = new Graph();
-        //    var nodesToExplore = new Stack<object>();
-        //    var exploredNodes = new HashSet<object>();
-
-        //    nodesToExplore.Push(root);
-
-        //    while (nodesToExplore.Count > 0)
-        //    {
-        //        var parent = nodesToExplore.Pop();
-        //        exploredNodes.Add(parent);
-
-        //        foreach (var childEdge in this.table.Select().Where(e => e["destination"].Equals(parent)))
-        //        {
-        //            TransitiveClosure.Add(childEdge["source"], childEdge["destination"]);       //add the statedEdge
-        //            var childNode = childEdge["source"];
-
-        //            //add all the parents TC edges to the childNode                
-        //            foreach (var ancestorEdge in TransitiveClosure.table.Select().Where(e => e["source"].Equals(parent)))
-        //            {
-        //                TransitiveClosure.Add(childNode, ancestorEdge["destination"]); // AncestorEdges 
-
-
-        //                if (exploredNodes.Contains(childNode))
-        //                {
-        //                    // for all the childnodes descendents, add new ancestor parents too
-        //                    foreach (var descendentEdge in TransitiveClosure.table.Select().Where(e => e["destination"].Equals(childNode)))
-        //                    {
-        //                        TransitiveClosure.Add(descendentEdge["source"], ancestorEdge["destination"]); // AncestorEdges
-        //                    }
-        //                }
-        //            }
-
-        //            if (!exploredNodes.Contains(childNode))
-        //            {
-        //                nodesToExplore.Push(childNode);
-        //            }
-
-
-
-        //        }
-
-        //    }
-
-        //    return TransitiveClosure;
-        //}
-
-    //}
+    }    
 }
-
-////if the node has been explored, add all its edges to its descedents
-//     if (exploredNodes.Contains(childNode))
-//     {
-//         foreach (var descendentEdge in TransitiveClosure.Where(e => e.destination.Equals(childNode)).ToArray())
-//         {
-//             TransitiveClosure.Add(new DirectedEdge(descendentEdge.source, ancestorEdge.destination)); // AncestorEdges
-//         }
-//     }
-//     else
-//     {
-//         nodesToExplore.Push(childNode);
-//     }
