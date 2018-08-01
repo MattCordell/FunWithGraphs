@@ -16,11 +16,11 @@ namespace Graphs
             var w = new Stopwatch();
             w.Start();
             //var NormalisedGraph = ReadActiveStatedRelationships(@"C:\sct2_Relationship_Snapshot_AU1000036_20180731.txt");
-            //var NormalisedGraph = ReadActiveStatedRelationships(@"C:\sct2_StatedRelationship_Snapshot_INT_20180131.txt");
-            //long rootNode = 30515011000036103;
+            var Progeny = ReadActiveStatedRelationships(@"C:\sct2_StatedRelationship_Snapshot_INT_20180131.txt");
+            long rootNode = 30515011000036103;
 
             //"Progeny" Adjacency list with Key = parent nodes, and value = children
-            var Progeny = new AdjacenyList();
+            //var Progeny = new AdjacenyList();
 
             /*
                A
@@ -31,16 +31,17 @@ namespace Graphs
             
             */
 
-            Progeny.AddEdge('A', 'B');
-            Progeny.AddEdge('A', 'C');
-            Progeny.AddEdge('C', 'D');
-            Progeny.AddEdge('C', 'E');
-            Progeny.AddEdge('B', 'D');
-            var rootNode = 'A';
+            //Progeny.AddEdge('A', 'B');
+            //Progeny.AddEdge('A', 'C');
+            //Progeny.AddEdge('C', 'D');
+            //Progeny.AddEdge('C', 'E');
+            //Progeny.AddEdge('B', 'D');
+            //var rootNode = 'A';
 
             Console.WriteLine("There are {0} edges in the original graph", Progeny.CountEdges());
-
-            Progeny.OutPutGraph();
+            Console.WriteLine("Took {0}", w.ElapsedMilliseconds.ToString());
+            w.Restart();
+            //Progeny.OutPutGraph();
 
             var tc = new AdjacenyList();
             var nodesToExplore = new Stack<object>();
@@ -104,8 +105,10 @@ namespace Graphs
                 }                                           
             }
 
-            Console.WriteLine("Here's the TC:");
-            tc.OutPutGraph();
+            Console.WriteLine("TC calculation {0}", w.ElapsedMilliseconds.ToString());
+            w.Restart();
+            //Console.WriteLine("Here's the TC:");
+            //tc.OutPutGraph();
             Console.WriteLine("It's got {0} edges",tc.CountEdges().ToString());
             Console.WriteLine("Done.");
             Console.ReadKey();
@@ -186,6 +189,24 @@ namespace Graphs
                 AL[node1].Add(node2);
                 AL[node2].Add(node1);
             }
+        }
+
+        internal static AdjacenyList ReadActiveStatedRelationships(string path)
+        {
+            var relationships = new FileHelperAsyncEngine<Relationship>();
+            var G = new AdjacenyList();
+            using (relationships.BeginReadFile(path))
+            {
+                foreach (Relationship r in relationships)
+                {
+                    if (r.active && r.typeId == 116680003) //active IS A relationships
+                    {
+                        G.AddEdge(r.destinationId, r.sourceId);
+                    }
+                }
+            }
+            Console.WriteLine("Stated Relationships Read");
+            return G;
         }
 
         [DelimitedRecord("\t")]

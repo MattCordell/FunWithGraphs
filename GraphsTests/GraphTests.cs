@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Graphs;
 
 namespace Graphs.Tests
 {
@@ -26,7 +27,7 @@ namespace Graphs.Tests
         public void BasicPolyHeirarchyTC()
         {   //Arrange
             //"Progeny" Adjacency list with Key = parent nodes, and value = children
-            var Progeny = new AdjacenyList();
+            //var Progeny = new AdjacenyList();
 
             /*
                A
@@ -37,12 +38,12 @@ namespace Graphs.Tests
             
             */
 
-            Progeny.AddEdge('A', 'B');
-            Progeny.AddEdge('A', 'C');
-            Progeny.AddEdge('C', 'D');
-            Progeny.AddEdge('C', 'E');
-            Progeny.AddEdge('B', 'D');
-            var rootNode = 'A';
+            //Progeny.AddEdge('A', 'B');
+            //Progeny.AddEdge('A', 'C');
+            //Progeny.AddEdge('C', 'D');
+            //Progeny.AddEdge('C', 'E');
+            //Progeny.AddEdge('B', 'D');
+            //var rootNode = 'A';
 
             //Act
 
