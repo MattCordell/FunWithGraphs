@@ -93,10 +93,7 @@ namespace Graphs
                     //if a terminal/leaf node is encountered, wind back the path.
                     //(keep popping until peek is in toExplore
                     else if (!Progeny.HasChildren(n))
-                    {
-                        //progeny.AL[n]
-                        
-                        //while (nodesToExplore.Contains(path.Peek()) && !path.Peek().Equals(rootNode))
+                    {                        
                        while (!Progeny.AL[path.Peek()].Contains(nodesToExplore.Peek()) && !path.Peek().Equals(rootNode))
                         {
                             path.Pop();
