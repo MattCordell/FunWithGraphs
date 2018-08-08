@@ -9,6 +9,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphsTests", "GraphsTests\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdjancencyList-DFS", "ConsoleApplication1\AdjancencyList-DFS.csproj", "{262EBE9D-A9BB-426B-8D5E-9691A9EC3776}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recursive_TC", "Recursive_TC\Recursive_TC.csproj", "{293DF48B-3362-4B64-9E0B-D5D04AA79492}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransitiveClosure", "..\..\..\Documents\Visual Studio 2015\Projects\TC\C#\TransitiveClosure\TransitiveClosure.csproj", "{BC67C4CF-2C52-4E8A-873C-C86AA7B31D87}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "consoleTC_matrix", "consoleTC_matrix\consoleTC_matrix.csproj", "{A86E4CF0-458E-4792-8D6D-730880CB52E2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +33,18 @@ Global
 		{262EBE9D-A9BB-426B-8D5E-9691A9EC3776}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{262EBE9D-A9BB-426B-8D5E-9691A9EC3776}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{262EBE9D-A9BB-426B-8D5E-9691A9EC3776}.Release|Any CPU.Build.0 = Release|Any CPU
+		{293DF48B-3362-4B64-9E0B-D5D04AA79492}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{293DF48B-3362-4B64-9E0B-D5D04AA79492}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{293DF48B-3362-4B64-9E0B-D5D04AA79492}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{293DF48B-3362-4B64-9E0B-D5D04AA79492}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC67C4CF-2C52-4E8A-873C-C86AA7B31D87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC67C4CF-2C52-4E8A-873C-C86AA7B31D87}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC67C4CF-2C52-4E8A-873C-C86AA7B31D87}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC67C4CF-2C52-4E8A-873C-C86AA7B31D87}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A86E4CF0-458E-4792-8D6D-730880CB52E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A86E4CF0-458E-4792-8D6D-730880CB52E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A86E4CF0-458E-4792-8D6D-730880CB52E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A86E4CF0-458E-4792-8D6D-730880CB52E2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

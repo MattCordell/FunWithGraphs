@@ -14,16 +14,14 @@ namespace Graphs
         static void Main(string[] args)
         {
             var w = new Stopwatch();
-            w.Start();
+            //w.Start();            
             //var Progeny = ReadActiveStatedRelationships(@"C:\sct2_Relationship_Snapshot_AU1000036_20180731.txt");
-            //var Progeny = ReadActiveStatedRelationships(@"C:\sct2_StatedRelationship_Snapshot_INT_20180131.txt");
-            var Progeny = ReadActiveStatedRelationships(@"C:\sct2_Relationship_Snapshot_AU1000036_20180731.txt");
             //long rootNode = 30515011000036103; // AU Qualifier
-            long rootNode = 30561011000036101; //AU concept
+            //long rootNode = 30561011000036101; //AU concept
             //long rootNode = 138875005;// SCT
 
             //"Progeny" Adjacency list with Key = parent nodes, and value = children
-            //var Progeny = new AdjacenyList();
+            var Progeny = new AdjacenyList();
 
             /*
                A
@@ -33,13 +31,13 @@ namespace Graphs
                D   E
             
             */
-
-            //Progeny.AddEdge('A', 'B');
-            //Progeny.AddEdge('A', 'C');
-            //Progeny.AddEdge('C', 'D');
-            //Progeny.AddEdge('C', 'E');
-            //Progeny.AddEdge('B', 'D');
-            //var rootNode = 'A';
+            //aNCESTRY child, parent
+            Progeny.AddEdge('B', 'A');
+            Progeny.AddEdge('C', 'A');
+            Progeny.AddEdge('D', 'B');
+            Progeny.AddEdge('D', 'B');
+            Progeny.AddEdge('E', 'C');
+            var rootNode = 'A';
 
             Console.WriteLine("There are {0} edges in the original graph", Progeny.CountEdges());
             Console.WriteLine("Took {0}", w.ElapsedMilliseconds.ToString());
@@ -50,76 +48,21 @@ namespace Graphs
             var nodesToExplore = new Stack<object>();
             var Explored = new HashSet<object>();
             var path = new Stack<object>();
-            
+
             nodesToExplore.Push(rootNode);
             //path.Push(rootNode);
-            int i = 0; 
+            int i = 0;
 
             while (nodesToExplore.Count > 0)
             {
-                var n = nodesToExplore.Pop();
-                foreach (var node in path)
-                {
-                    tc.AddEdge(node, n);
-                }
-
-                if (Explored.Contains(n))
-                {
-                    //Add it to everything in the path
-                    foreach (var item in path)
-                    {
-                        tc.AddEdge(item, n);
-                    }
-
-                    if (Progeny.HasChildren(n))
-                    {
-                        //Add its subtypes to every node in path
-                        foreach (var node in path)
-                        {
-                            tc.AL[node].Union(tc.AL[n]);
-                        }
-                    }
-                }
-
-                // if not explored, 
-                else 
-                {
-                    // queue up the children for exploration, and add parent to path
-                    if (Progeny.HasChildren(n))
-                    {
-                        path.Push(n);
-                        foreach (var child in Progeny.AL[n])
-                        {
-                            nodesToExplore.Push(child);
-
-                        }
-                    }
-
-                    //if a terminal/leaf node is encountered, wind back the path.
-                    //(keep popping until peek is in toExplore
-                    else if (!Progeny.HasChildren(n))
-                    {
-                        // !Progeny.AL[path.Peek()].Contains(nodesToExplore.Peek())                  
-                        var children = Progeny.AL[path.Peek()];
-
-                        if (nodesToExplore.Count > 0)
-                        {
-                            while (children.Contains(nodesToExplore.Peek()) && !path.Peek().Equals(rootNode))
-                            {
-                                path.Pop();
-                            }
-                        }
-
-                    }
-                    Explored.Add(n);
-                }                                           
+                //
             }
 
             Console.WriteLine("TC calculation took {0}", w.ElapsedMilliseconds.ToString());
             w.Restart();
             //Console.WriteLine("Here's the TC:");
             //tc.OutPutGraph();
-            Console.WriteLine("It's got {0} edges",tc.CountEdges().ToString());
+            Console.WriteLine("It's got {0} edges", tc.CountEdges().ToString());
             Console.WriteLine("Done.");
             Console.ReadKey();
         }
@@ -128,7 +71,7 @@ namespace Graphs
         //would use a <source>,hasTable<ancestor>
         //for each entry
         //if !entry.hashtable.contains(root)
-             //workToDo = true
+        //workToDo = true
         //     for each ancestor of entry
         //        entry.union.ancestor.values
 
@@ -142,7 +85,7 @@ namespace Graphs
             public Dictionary<object, HashSet<object>> AL;
 
             public AdjacenyList()
-            {                          
+            {
                 AL = new Dictionary<object, HashSet<object>>();
             }
 
@@ -151,7 +94,7 @@ namespace Graphs
                 //create a new index if not already there
                 if (!AL.ContainsKey(source))
                 {
-                    AL.Add(source, new HashSet<object>());                    
+                    AL.Add(source, new HashSet<object>());
                 }
                 AL[source].Add(destination);
             }
@@ -180,7 +123,7 @@ namespace Graphs
 
             internal IEnumerable<object> ReturnChildren(object parentNode)
             {
-                    return AL[parentNode];                         
+                return AL[parentNode];
             }
 
             public bool HasChildren(object node)
@@ -244,5 +187,5 @@ namespace Graphs
             public long modifierId;
         }
 
-    }    
+    }
 }
